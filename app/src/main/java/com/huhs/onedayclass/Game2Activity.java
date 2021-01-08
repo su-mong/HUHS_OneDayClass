@@ -2,9 +2,11 @@ package com.huhs.onedayclass;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -14,11 +16,13 @@ import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
-public class MainActivity extends AppCompatActivity {
+public class Game2Activity extends AppCompatActivity {
 
     List<Integer> imgBatch = new ArrayList<>();
     Button[] btnArray;
     Button btnRestart;
+    RelativeLayout rl;
+    Button btnNext;
     TextView tvScore;
     TextView tvClicked;
 
@@ -31,7 +35,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_game2);
 
         Data_Setting();
         Restart_Setting();
@@ -41,18 +45,16 @@ public class MainActivity extends AppCompatActivity {
 
     private void Data_Setting() {
         imgBatch.clear();
-        imgBatch.add(R.drawable.img0);imgBatch.add(R.drawable.img1);imgBatch.add(R.drawable.img2);imgBatch.add(R.drawable.img3);imgBatch.add(R.drawable.img4);
-        imgBatch.add(R.drawable.img5);imgBatch.add(R.drawable.img6);imgBatch.add(R.drawable.img7);imgBatch.add(R.drawable.img8);imgBatch.add(R.drawable.img9);
-        imgBatch.add(R.drawable.img0);imgBatch.add(R.drawable.img1);imgBatch.add(R.drawable.img2);imgBatch.add(R.drawable.img3);imgBatch.add(R.drawable.img4);
-        imgBatch.add(R.drawable.img5);imgBatch.add(R.drawable.img6);imgBatch.add(R.drawable.img7);imgBatch.add(R.drawable.img8);imgBatch.add(R.drawable.img9);
+        imgBatch.add(R.drawable.img0);imgBatch.add(R.drawable.img1);imgBatch.add(R.drawable.img2);
+        imgBatch.add(R.drawable.img0);imgBatch.add(R.drawable.img1);imgBatch.add(R.drawable.img2);
 
-        btnArray = new Button[]{findViewById(R.id.btn01), findViewById(R.id.btn02), findViewById(R.id.btn03), findViewById(R.id.btn04), findViewById(R.id.btn05)
-                , findViewById(R.id.btn06), findViewById(R.id.btn07), findViewById(R.id.btn08), findViewById(R.id.btn09), findViewById(R.id.btn10)
-                , findViewById(R.id.btn11), findViewById(R.id.btn12), findViewById(R.id.btn13), findViewById(R.id.btn14), findViewById(R.id.btn15)
-                , findViewById(R.id.btn16), findViewById(R.id.btn17), findViewById(R.id.btn18), findViewById(R.id.btn19), findViewById(R.id.btn20)};
+        btnArray = new Button[]{findViewById(R.id.btng201),findViewById(R.id.btng202),findViewById(R.id.btng203),
+                findViewById(R.id.btng204),findViewById(R.id.btng205),findViewById(R.id.btng206)};
 
-        tvScore = findViewById(R.id.tvScore);
-        tvClicked = findViewById(R.id.tvClicked);
+        rl = findViewById(R.id.rlg2);
+        btnNext = findViewById(R.id.btnNextg2);
+        tvScore = findViewById(R.id.tvScoreg2);
+        tvClicked = findViewById(R.id.tvClickedg2);
 
         btnFliped = new boolean[]{false, false, false, false, false, false, false, false, false, false,
                 false, false, false, false, false, false, false, false, false, false};
@@ -66,12 +68,21 @@ public class MainActivity extends AppCompatActivity {
 
         Collections.shuffle(imgBatch);
 
-        for(int i=0;i<20;i++)
+        for(int i=0;i<6;i++)
             btnArray[i].setBackgroundColor(0xffeaded2);
+
+        btnNext.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(Game2Activity.this, Game3Activity.class);
+                startActivity(intent);
+                finish();
+            }
+        });
     }
 
     private void Restart_Setting() {
-        btnRestart = findViewById(R.id.btnRestart);
+        btnRestart = findViewById(R.id.btnRestartg2);
 
         btnRestart.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -83,7 +94,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void Play_Game() {
-        for(int i=0;i<20;i++) {
+        for(int i=0;i<6;i++) {
             final int pos = i;
             btnArray[pos].setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -106,8 +117,10 @@ public class MainActivity extends AppCompatActivity {
                                 score += 10;
                                 tvScore.setText("점수 : "+score+"점");
 
-                                if(score == 100)
-                                    Toast.makeText(getApplicationContext(), "게임 끝. 클릭 횟수 : "+clickNum+"번", Toast.LENGTH_SHORT).show();
+                                if(score == 30) {
+                                    Toast.makeText(getApplicationContext(), "게임 끝. 클릭 횟수 : " + clickNum + "번", Toast.LENGTH_SHORT).show();
+                                    rl.setVisibility(View.VISIBLE);
+                                }
                             } else {
                                 Timer delayTimer = new Timer();
                                 TimerTask delayTask = new TimerTask() {
